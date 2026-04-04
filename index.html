@@ -432,7 +432,7 @@
       <div style="padding: 24px 32px;">
         <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
           <input id="test-input" type="text" placeholder="Type a chat message to test..." style="flex: 1; min-width: 200px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 18px; font-size: 15px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none;" />
-          <button id="test-btn" id="test-btn-click" style="background: var(--purple); color: white; border: none; border-radius: 10px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Test it →</button>
+          <button id="test-btn" style="background: var(--purple); color: white; border: none; border-radius: 10px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Test it →</button>
         </div>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
@@ -476,8 +476,11 @@ function setTest(msg) {
   document.getElementById('test-input').value = msg;
 }
 
-document.getElementById('test-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') runLiveTest();
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('test-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') runLiveTest();
+  });
+  document.getElementById('test-btn').addEventListener('click', runLiveTest);
 });
 
 async function runLiveTest() {
@@ -491,12 +494,12 @@ async function runLiveTest() {
 
   testsRemaining--;
   document.getElementById('tests-left').textContent = testsRemaining;
-
   document.getElementById('test-result').style.display = 'none';
   document.getElementById('test-loading').style.display = 'block';
   document.getElementById('test-btn').disabled = true;
   document.getElementById('test-btn').textContent = 'Analyzing...';
 
+  try {
     const response = await fetch('/.netlify/functions/moderate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -520,9 +523,9 @@ async function runLiveTest() {
       reason.textContent = 'This message is fine — ModMate AI would let it through.';
     } else {
       const styles = {
-        ban:     { bg: 'rgba(255,92,92,0.15)',   color: '#ff5c5c', label: '⚑ Banned' },
-        timeout: { bg: 'rgba(255,180,0,0.15)',   color: '#ffb400', label: '⏱ Timeout' },
-        warn:    { bg: 'rgba(124,92,252,0.15)',  color: '#a688fd', label: '⚠ Warning' },
+        ban:     { bg: 'rgba(255,92,92,0.15)',  color: '#ff5c5c', label: '⚑ Banned' },
+        timeout: { bg: 'rgba(255,180,0,0.15)',  color: '#ffb400', label: '⏱ Timeout' },
+        warn:    { bg: 'rgba(124,92,252,0.15)', color: '#a688fd', label: '⚠ Warning' },
       };
       const s = styles[result.action] || styles.warn;
       badge.style.cssText = `font-size:13px;font-weight:700;padding:6px 16px;border-radius:999px;background:${s.bg};color:${s.color};`;
@@ -549,7 +552,7 @@ async function runLiveTest() {
   document.getElementById('test-btn').disabled = false;
   document.getElementById('test-btn').textContent = 'Test it →';
 }
-document.getElementById('test-btn-click').addEventListener('click', runLiveTest);</script>
+</script>
 <section class="section">
   <div class="demo-container">
     <div class="section-label">Everything you need</div>
