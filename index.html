@@ -432,7 +432,7 @@
       <div style="padding: 24px 32px;">
         <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
           <input id="test-input" type="text" placeholder="Type a chat message to test..." style="flex: 1; min-width: 200px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 18px; font-size: 15px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none;" />
-          <button id="test-btn" onclick="runLiveTest()" style="background: var(--purple); color: white; border: none; border-radius: 10px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Test it →</button>
+          <button id="test-btn" id="test-btn-click" style="background: var(--purple); color: white; border: none; border-radius: 10px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Test it →</button>
         </div>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
@@ -549,7 +549,7 @@ async function runLiveTest() {
   document.getElementById('test-btn').disabled = false;
   document.getElementById('test-btn').textContent = 'Test it →';
 }
-</script>
+document.getElementById('test-btn-click').addEventListener('click', runLiveTest);</script>
 <section class="section">
   <div class="demo-container">
     <div class="section-label">Everything you need</div>
