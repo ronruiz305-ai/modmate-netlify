@@ -702,18 +702,55 @@ async function runLiveTest() {
   <div class="section-label" style="text-align:center;">Get started</div>
   <h2 class="section-title" style="text-align:center;">Protect your chat<br>in 60 seconds.</h2>
   <div class="signup-card">
-    <h3>Create your account</h3>
-    <p>Connect with Twitch and ModMate AI joins your chat instantly.</p>
-    <div class="form-group">
-      <input class="form-input" type="email" placeholder="Your email address" />
+    <h3>Join the waitlist</h3>
+    <p>Enter your email and Twitch channel — we'll reach out as soon as your spot is ready.</p>
+    <form id="waitlist-form" action="https://formspree.io/f/mwvwrdep" method="POST">
+      <input type="hidden" name="type" value="Waitlist signup" />
+      <div class="form-group">
+        <input class="form-input" type="text" name="twitch" placeholder="Your Twitch channel name" required />
+      </div>
+      <div class="form-group" style="margin-top:12px;">
+        <input class="form-input" type="email" name="email" placeholder="Your email address" required />
+      </div>
+      <button class="twitch-btn" type="submit" id="waitlist-btn" style="margin-top:16px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+        <span id="waitlist-btn-text">Connect with Twitch</span>
+      </button>
+    </form>
+    <div id="waitlist-success" style="display:none; background:rgba(35,209,139,0.1); border:1px solid rgba(35,209,139,0.3); border-radius:10px; padding:24px; text-align:center; color:#23d18b; font-size:15px; font-weight:500; margin-top:16px;">
+      ✓ You're on the list! We'll be in touch soon.
     </div>
-    <button class="twitch-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
-      Connect with Twitch
-    </button>
-    <p class="signup-note">By signing up you agree to our <a href="terms.html" style="color:var(--purple-light);text-decoration:none;">Terms of Service</a>. No credit card required for the free plan.</p>
+    <p class="signup-note">By signing up you agree to our <a href="terms.html" style="color:var(--purple-light);text-decoration:none;">Terms of Service</a>. No credit card required.</p>
   </div>
 </div>
+
+<script>
+document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('waitlist-btn');
+  const btnText = document.getElementById('waitlist-btn-text');
+  btnText.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  try {
+    const response = await fetch('https://formspree.io/f/mwvwrdep', {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      document.getElementById('waitlist-form').style.display = 'none';
+      document.getElementById('waitlist-success').style.display = 'block';
+    } else {
+      btnText.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    btnText.textContent = 'Something went wrong — try again';
+    btn.disabled = false;
+  }
+});
+</script>
 
 <!-- FOOTER -->
 <footer>
